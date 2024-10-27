@@ -306,6 +306,9 @@ newtype_index! {
 }
 
 impl ExprKind {
+    /// Interning is a way to deduplicate expressions
+    /// https://github.com/feroldi/oxide/issues/1#issuecomment-523002973
+    /// https://en.wikipedia.org/wiki/String_interning
     fn intern(self) -> Expr {
         Expr { kind: Interned::new(self), espan: None }
     }

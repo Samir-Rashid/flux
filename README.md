@@ -39,6 +39,8 @@ Documentation, including installation and usage guides can be found on the
 
 Automatically infers loop invariant of loops. 
 
+Flux does not support refining floats.
+
 # Resources
 
 - link to flux paper
@@ -46,3 +48,30 @@ Automatically infers loop invariant of loops.
 
 
 Flux is only keeping track of the type, not exact values.
+
+
+Flux surface has the syntax
+this goes to flux desugar (insert fhir block comment)
+
+
+what does it mean: by not having quantifiers, you can easily infer invariants
+
+
+
+debugginng process:
+
+dump internal data to `./log/`
+FLUX_DUMP_CONSTRAINT=1 FLUX_DUMP_MIR=1 cargo flux
+
+debug assertions
+cargo xtask install --debug
+
+
+
+All the cargo xtask commands
+
+cargo xtask test
+cargo xtask run - to run on a single file
+
+
+You lose refinement info when casting between types.

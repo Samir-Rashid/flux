@@ -1253,9 +1253,10 @@ impl<'tcx> ToRustc<'tcx> for Ty {
 
 #[derive(Clone, PartialEq, Eq, Hash, TyEncodable, TyDecodable, Debug)]
 pub enum TyKind {
-    Indexed(BaseTy, Expr),
-    Exists(Binder<Ty>),
-    Constr(Expr, Ty),
+    Indexed(BaseTy, Expr), // base type refined by a refinement expression: `B[e]`
+    Exists(Binder<Ty>), // existential type. `\exists  v : \sigma . T` (sigma is a sort)
+    Constr(Expr, Ty), // constraint type `{ T | e }`
+
     Uninit,
     StrgRef(Region, Path, Ty),
     Ptr(PtrKind, Path),
@@ -1284,6 +1285,10 @@ pub enum PtrKind {
     Box,
 }
 
+// BaseTy is a Rust type which can be refined. The rustc and BaseTy representations correspond with each other.
+/// BaseTy describes the Base Type of the term and the argument describes the
+/// exact type. For example, `BaseTy::Int` describes integers and the argument `IntTy`
+/// specifies the kind of integer, such as `IntTy::I32`.
 #[derive(Clone, PartialEq, Eq, Hash, TyEncodable, TyDecodable)]
 pub enum BaseTy {
     Int(IntTy),
