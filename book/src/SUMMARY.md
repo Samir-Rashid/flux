@@ -1,6 +1,7 @@
 # Summary
 
 [Introduction](README.md)
+[Lore](guide/lore.md)
 
 # Guide
 
@@ -19,6 +20,3 @@
 - [Structs]()
 - [Enums]()
 
------------
-
-[About](about.md)

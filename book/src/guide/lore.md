@@ -15,6 +15,8 @@ According to the Rust homepage
 
 In 1991, T. Freeman and F. Pfenning introduced refinement types in "Refinement types for ML". Refinement types let you add logical contraints to typed terms. A spry grad student, Ranjit Jhala, was inspired by the potential for program verification of large-scale imperative systems. Jhala has been working on scalable program verification since the turn of the millenium. At last, his vision is being realized. In 2008, Jhala presented his vision of refinement types, called Liquid Types, to the world.  Liquid Types have woven a path through TypeScript, Haskell, and now Rust. Flux hopes to expand lightweight verification to a popular, imperative systems language.
 
+You can learn more about LiquidHaskell [here](https://ucsd-progsys.github.io/liquidhaskell-blog/about.html) and read the mentioned papers to learn about the theory behind Liquid Types.
+
 ## Why is it called Flux?
 
 > **flux** (/flʌks/) **1.** a flowing or flow. **2.** a substance used to refine metals. *v.* **3.** to melt; make fluid
