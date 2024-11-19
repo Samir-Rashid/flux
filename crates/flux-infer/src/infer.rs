@@ -99,6 +99,7 @@ impl<'genv, 'tcx> InferCtxtRoot<'genv, 'tcx> {
     }
 }
 
+/// Type inference context
 pub struct InferCtxt<'infcx, 'genv, 'tcx> {
     pub genv: GlobalEnv<'genv, 'tcx>,
     pub region_infcx: &'infcx rustc_infer::infer::InferCtxt<'tcx>,

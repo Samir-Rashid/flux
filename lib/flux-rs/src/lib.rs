@@ -89,6 +89,17 @@ pub fn should_fail(attrs: TokenStream, tokens: TokenStream) -> TokenStream {
     attr_impl::should_fail(attrs, tokens)
 }
 
+//cannot export macro_rules! macros from a `proc-macro` crate type currently
+/// Macro for to debug the internal Flux checker state.
+/// Downstream, this triggers code in `check_statement`.
+// #[macro_export]
+// macro_rules! printenv {
+//     () => {
+//         let _x = "FLUX_MAGIC_STRING_VALUE";
+//         // println!("x_{}", _x);
+//     }
+// }
+
 #[cfg(flux_sysroot)]
 mod attr_sysroot {
     use super::*;

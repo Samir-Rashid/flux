@@ -1,3 +1,4 @@
+// convert rustc types to flux types.
 use flux_arc_interner::List;
 use flux_common::result::ResultExt;
 use flux_errors::FluxSession;
@@ -644,6 +645,7 @@ impl<'sess, 'tcx> MirLoweringCtxt<'_, 'sess, 'tcx> {
             (_, _) => Some(Constant::Opaque(ty.lower(tcx)?)),
         }
         .ok_or_else(|| UnsupportedReason::new(format!("unsupported constant `{constant:?}`")))
+        // isn't this useless?
     }
 
     fn scalar_int_to_constant(
@@ -663,10 +665,14 @@ impl<'sess, 'tcx> MirLoweringCtxt<'_, 'sess, 'tcx> {
             TyKind::Float(float_ty) => {
                 Some(Constant::Float(scalar_to_bits(self.tcx, scalar, ty).unwrap(), *float_ty))
             }
-            TyKind::Char => Some(Constant::Char),
+            // how could these be scalar ints?
+            TyKind::Char => Some(Constant::Char(scalar.to_u32())),
+            TyKind::Str => panic!(),
             TyKind::Bool => Some(Constant::Bool(scalar.try_to_bool().unwrap())),
             TyKind::Tuple(tys) if tys.is_empty() => Some(Constant::Unit),
+            // Opaquely interpret other types
             _ => {
+                // std::num::NonZero<usize> @nilehmann what is this and should I add it
                 match ty.lower(self.tcx) {
                     Ok(ty) => Some(Constant::Opaque(ty)),
                     Err(_) => None,
