@@ -104,8 +104,8 @@ pub struct InferCtxt<'infcx, 'genv, 'tcx> {
     pub genv: GlobalEnv<'genv, 'tcx>,
     pub region_infcx: &'infcx rustc_infer::infer::InferCtxt<'tcx>,
     pub def_id: DefId,
-    rcx: RefineCtxt<'infcx>,
-    inner: &'infcx RefCell<InferCtxtInner>,
+    pub rcx: RefineCtxt<'infcx>,
+    pub inner: &'infcx RefCell<InferCtxtInner>,
 }
 
 struct InferCtxtInner {

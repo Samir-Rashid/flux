@@ -235,7 +235,7 @@ fn find_trait_item(
 ///  fn g(x1:T1,...,xn:Tn) -> T {
 ///      f(x1,...,xn)
 ///  }
-/// TODO: copy rules from SLACK.
+/// TODO: copy rules from SLACK. @ranjitjhala
 fn check_fn_subtyping(
     infcx: &mut InferCtxt,
     def_id: &DefId,
@@ -570,13 +570,16 @@ impl<'ck, 'genv, 'tcx, M: Mode> Checker<'ck, 'genv, 'tcx, M> {
                     Rvalue::Use(Operand::Constant(Constant::Str(_a))) => {
                         if true {
                             println!(
-                                "debug detected: {:?}",
-                                _a.to_string() == "FLUX_MAGIC_STRING_VALUE"
+                                "debug detected: {:?} in {:#?} mode",
+                                _a.to_string() == "FLUX_MAGIC_STRING_VALUE",
+                                M::NAME
                             );
                             // print the entire debug environment at this point
                             println!("debug env: {:?}", env);
+                            // println!("debug env: {}", self.genv.tcx());
+
                             println!("debug statement span: {:?}", stmt_span);
-                            println!("debug incfx: {:?}", infcx);
+                            println!("debug incfx: {:?}\n", infcx.rcx.tree);
                         }
                     }
                     _ => {}

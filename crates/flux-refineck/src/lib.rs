@@ -168,8 +168,8 @@ pub fn check_fn(
                 .map_err(|err| err.emit_err(&genv, def_id))?;
         tracing::info!("check_fn::refine");
         // everything on path of tree is relevant
-        if false {
-            println!("refine_tree: {:?}", refine_tree);
+        if true {
+            println!("final refine_tree: {:?}", refine_tree);
         }
 
         // PHASE 3: invoke fixpoint on the constraint

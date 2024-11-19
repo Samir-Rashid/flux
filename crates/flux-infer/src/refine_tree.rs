@@ -66,8 +66,8 @@ pub struct RefineTree {
 /// [refinement tree]: RefineTree
 pub struct RefineCtxt<'a> {
     // this prints the path in the tree
-    tree: &'a mut RefineTree,
-    ptr: NodePtr,
+    pub tree: &'a mut RefineTree,
+    pub ptr: NodePtr,
 }
 
 /// A snapshot of a [`RefineCtxt`] at a particular point during type-checking. Alternatively, a
