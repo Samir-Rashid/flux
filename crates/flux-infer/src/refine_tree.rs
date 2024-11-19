@@ -42,6 +42,7 @@ use crate::{
 /// [`UnsafeCell`]: std::cell::UnsafeCell
 /// [`GhostCell`]: https://docs.rs/ghost-cell/0.2.3/ghost_cell/ghost_cell/struct.GhostCell.html
 pub struct RefineTree {
+    // this is the same data as .fluxc
     root: NodePtr,
 }
 
@@ -64,6 +65,7 @@ pub struct RefineTree {
 ///
 /// [refinement tree]: RefineTree
 pub struct RefineCtxt<'a> {
+    // this prints the path in the tree
     tree: &'a mut RefineTree,
     ptr: NodePtr,
 }
@@ -136,6 +138,7 @@ impl Scope {
     }
 }
 
+#[derive(Debug)]
 struct Node {
     kind: NodeKind,
     /// Number of bindings between the root and this node's parent, i.e., we have
@@ -146,7 +149,7 @@ struct Node {
     children: Vec<NodePtr>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct NodePtr(Rc<RefCell<Node>>);
 
 impl NodePtr {
@@ -172,6 +175,7 @@ impl NodePtr {
     }
 }
 
+#[derive(Clone, Debug)]
 struct WeakNodePtr(Weak<RefCell<Node>>);
 
 impl WeakNodePtr {
@@ -180,6 +184,7 @@ impl WeakNodePtr {
     }
 }
 
+#[derive(Debug)]
 enum NodeKind {
     /// List of const and refinement generics
     Root(Vec<(Var, Sort)>),

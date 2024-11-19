@@ -63,6 +63,7 @@ fn report_fixpoint_errors(
 ) -> Result<(), ErrorGuaranteed> {
     #[expect(clippy::collapsible_else_if, reason = "it looks better")]
     if genv.should_fail(local_id) {
+        // assert that negative tests (`#[flux::should_fail]`) fail
         if errors.is_empty() {
             report_expected_neg(genv, local_id)
         } else {
@@ -72,6 +73,10 @@ fn report_fixpoint_errors(
         if errors.is_empty() {
             Ok(())
         } else {
+            // TODO: This needs to be printed and attached to the error span in the same way as liquid haskell
+            // Inferred Type {} not a subtype {} in context {}
+            // after this is implemented, add a assert type macro that just makes it fail to show an error
+
             report_errors(genv, errors)
         }
     }
@@ -100,6 +105,7 @@ fn invoke_fixpoint(
     fcx.check(cache, cstr, config.scrape_quals).emit(&genv)
 }
 
+/// Main function which runs all the refinement checking steps in 3 PHASES.
 pub fn check_fn(
     genv: GlobalEnv,
     cache: &mut QueryCache,
@@ -149,7 +155,7 @@ pub fn check_fn(
             .with_span(span)
             .map_err(|err| err.emit_err(&genv, def_id))?;
 
-        // PHASE 1: infer shape of `TypeEnv` at the entry of join points
+        // PHASE 1: infer shape of [`TypeEnv`] at the entry of join points
         let shape_result = Checker::run_in_shape_mode(genv, local_id, &ghost_stmts, config)
             // Augment the possible CheckError with the functions span so we can report
             // helpful error messages for opaque struct field accesses
@@ -161,10 +167,18 @@ pub fn check_fn(
             Checker::run_in_refine_mode(genv, local_id, &ghost_stmts, shape_result, config)
                 .map_err(|err| err.emit_err(&genv, def_id))?;
         tracing::info!("check_fn::refine");
+        // everything on path of tree is relevant
+        if false {
+            println!("refine_tree: {:?}", refine_tree);
+        }
 
         // PHASE 3: invoke fixpoint on the constraint
         let errors = invoke_fixpoint(genv, cache, local_id, refine_tree, kvars, config, "fluxc")?;
+
+        // println!("errors: {:#?}", genv.tcx().);
+
         tracing::info!("check_fn::fixpoint");
+        #[expect(clippy::collapsible_else_if, reason = "it looks better")]
         report_fixpoint_errors(genv, local_id, errors)?;
 
         // PHASE 4: subtyping check for trait-method implementations

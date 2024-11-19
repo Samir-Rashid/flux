@@ -424,6 +424,7 @@ fn fold_local_ptrs(infcx: &mut InferCtxt, env: &mut TypeEnv, span: Span) -> Resu
 }
 
 impl<'ck, 'genv, 'tcx, M: Mode> Checker<'ck, 'genv, 'tcx, M> {
+    /// Main function which runs the [`Checker`]
     fn run(
         mut infcx: InferCtxt<'_, 'genv, 'tcx>,
         def_id: LocalDefId,
@@ -563,6 +564,23 @@ impl<'ck, 'genv, 'tcx, M: Mode> Checker<'ck, 'genv, 'tcx, M> {
         match &stmt.kind {
             StatementKind::Assign(place, rvalue) => {
                 let ty = self.check_rvalue(infcx, env, stmt_span, rvalue)?;
+                // logic should be behind a compiler flag
+                // println!("rvalue: {:?} /// {:?} /// {:?}", rvalue, place, ty.kind());
+                match rvalue {
+                    Rvalue::Use(Operand::Constant(Constant::Str(_a))) => {
+                        if true {
+                            println!(
+                                "debug detected: {:?}",
+                                _a.to_string() == "FLUX_MAGIC_STRING_VALUE"
+                            );
+                            // print the entire debug environment at this point
+                            println!("debug env: {:?}", env);
+                            println!("debug statement span: {:?}", stmt_span);
+                            println!("debug incfx: {:?}", infcx);
+                        }
+                    }
+                    _ => {}
+                }
                 self.check_assign_ty(infcx, env, place, ty, stmt.source_info)?;
             }
             StatementKind::SetDiscriminant { .. } => {
